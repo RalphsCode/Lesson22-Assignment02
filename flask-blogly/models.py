@@ -37,7 +37,7 @@ class User(db.Model):
 class Post(db.Model):
         """Class for User's posts"""
 
-        __tablename__ = 'users'
+        __tablename__ = 'posts'
 
         id = db.Column(db.Integer,    # Create int column called id
                    primary_key=True,
@@ -47,7 +47,7 @@ class Post(db.Model):
                           nullable=False)
         
         content = db.Column(db.Text,
-                            nullible=False)
+                            nullable=False)
         
         created_at = db.Column(
                         db.DateTime,

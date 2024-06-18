@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, render_template, request, redirect, flash
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)  # creating an instance of the Flask Class
@@ -73,3 +73,15 @@ def delete_user(user_id):
     db.session.commit()
     flash(' >>> User has been deleted <<<')
     return redirect('/users')
+
+@app.route('/users/<int:user_id>/posts/new', methods=['GET', 'POST'])
+def add_post(user_id):
+    if request.method == 'GET':
+        return render_template('new_post.html', user_id=user_id)
+    else:
+        new_title = request.form['title']                                          
+        new_post = request.form['content']
+        new_post = Post(title=new_title, content=new_post, user_id=user_id)
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect('/users')
