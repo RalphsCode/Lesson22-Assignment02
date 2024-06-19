@@ -13,6 +13,22 @@
 <a href="/users/{{user.id}}/edit" class="btn btn-primary">Edit</a>
 <a href="/users/{{user.id}}/delete" class="btn btn-warning">Delete</a>
 
+<!-- Show User's posts -->
+ <h3>Posts:</h3>
+ <ul>
+    {% if post_titles %}
+        {% for post in post_titles %}
+        <li>
+            <a href="/posts/{{post.id}}">{{post.title}}</a>
+        </li>
+        {% endfor %}
+    {% else %}
+    <li>
+        None
+    </li>
+    {% endif %}
+ </ul>
+
 <!-- Add a post -->
 <a href="/users/{{user.id}}/posts/new" class="btn btn-primary">Add Post</a>
 

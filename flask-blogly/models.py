@@ -20,6 +20,9 @@ class User(db.Model):
 
         __tablename__ = 'users'
 
+        def __repr__(self):
+                return f"<User id={self.id} - {self.first_name} {self.last_name} - {self.user_posts}>"
+
         id = db.Column(db.Integer,    # Create int column called id
                    primary_key=True,
                    autoincrement=True)
@@ -34,10 +37,15 @@ class User(db.Model):
                      default='none',
                      nullable=True)
         
+        user_posts = db.relationship('Post', backref='user')
+             
 class Post(db.Model):
         """Class for User's posts"""
 
         __tablename__ = 'posts'
+
+        def __repr__(self):
+                return f"<{self.title} - {self.user_id}>"
 
         id = db.Column(db.Integer,    # Create int column called id
                    primary_key=True,
@@ -57,3 +65,4 @@ class Post(db.Model):
         user_id = db.Column(db.Integer,
                             db.ForeignKey('users.id'),
                             nullable=False)
+        

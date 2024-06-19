@@ -8,6 +8,7 @@ app = Flask(__name__)  # creating an instance of the Flask Class
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Ponderosa@localhost/blogly'
 app.config['SQLALCHEMY_RECORD_QUERIES'] = True
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
 with app.app_context():
@@ -44,7 +45,8 @@ def new_user():
 @app.route('/users/<int:user_id>')
 def user_detail(user_id):
     user = User.query.get_or_404(user_id)
-    return render_template('user.html', user=user)
+    post_titles = Post.query.filter_by(user_id = user_id).all()
+    return render_template('user.html', user=user, post_titles=post_titles)
 
 @app.route('/users/<int:user_id>/edit', methods=['GET', 'POST'])
 def edit_user(user_id):
@@ -62,16 +64,21 @@ def edit_user(user_id):
             user.last_name = last_name
         if image_url != '':
             user.image_url = image_url
-        flash('+++ User has been updated +++')
+        flash('User has been updated')
         db.session.add(user)
         db.session.commit()
         return render_template('user.html', user=user)
     
 @app.route('/users/<int:user_id>/delete')
 def delete_user(user_id):
-    User.query.filter_by(id = user_id).delete()
+    to_delete = User.query.get(user_id)
+    # Delete any posts by the user to be deleted
+    Post.query.filter_by(user_id=user_id).delete()
+    # Delete the user
+    User.query.filter_by(id=user_id).delete()
     db.session.commit()
-    flash(' >>> User has been deleted <<<')
+    # Flash deleted user message
+    flash(f'{to_delete.first_name} {to_delete.last_name} has been deleted')
     return redirect('/users')
 
 @app.route('/users/<int:user_id>/posts/new', methods=['GET', 'POST'])
@@ -84,4 +91,10 @@ def add_post(user_id):
         new_post = Post(title=new_title, content=new_post, user_id=user_id)
         db.session.add(new_post)
         db.session.commit()
+        flash('Post Submitted')
         return redirect('/users')
+    
+@app.route('/posts/<int:post_id>')
+def display_post(post_id):
+    post = Post.query.get(post_id)
+    return render_template('display_post.html', post=post)
