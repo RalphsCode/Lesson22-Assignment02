@@ -103,6 +103,26 @@ def display_post(post_id):
 def edit_post(post_id):
     post = Post.query.get(post_id)
     if request.method == 'GET':
-        return render_template('edit_post.html', post_id=post_id)
+        return render_template('edit_post.html', post=post)
     else:
+        title = request.form.get('title')
+        content  = request.form.get('content')
+        # Update the record object as needed
+        if title != '':
+            post.title = title
+        post.content = content
+        # Update the database table record
+        db.session.add(post)
+        db.session.commit()
+        flash('Post has been updated')
         return render_template('display_post.html', post=post)
+    
+@app.route('/posts/<int:post_id>/delete')
+def delete_post(post_id):
+    # Delete the post
+    Post.query.filter_by(id=post_id).delete()
+    db.session.commit()
+    flash('Post has been deleted')
+    user_id = request.args['user_id']
+    print('#############', user_id, '##############')
+    return redirect(f'/users/{user_id}')
