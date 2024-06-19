@@ -11,7 +11,7 @@
 
 <!-- Edit & Delete user Buttons -->
 <a href="/users/{{user.id}}/edit" class="btn btn-primary">Edit</a>
-<a href="/users/{{user.id}}/delete" class="btn btn-warning">Delete</a>
+<a href="/users/{{user.id}}/delete" class="btn btn-danger">Delete</a>
 
 <!-- Show User's posts -->
  <h3>Posts:</h3>
@@ -30,9 +30,10 @@
  </ul>
 
 <!-- Add a post -->
-<a href="/users/{{user.id}}/posts/new" class="btn btn-primary">Add Post</a>
+<a href="/users/{{user.id}}/posts/new" class="btn btn-success">Add Post</a>
 
 <!-- List all users -->
-<p><br><a href="/users" >List All Users</a></p>
+<br><br>
+    <blockquote class="bg-info"><a href="/users" class="btn btn-info">List All Users</a></blockquote>
 
 {% endblock %}

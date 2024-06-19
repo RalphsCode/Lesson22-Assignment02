@@ -98,3 +98,11 @@ def add_post(user_id):
 def display_post(post_id):
     post = Post.query.get(post_id)
     return render_template('display_post.html', post=post)
+
+@app.route('/posts/<int:post_id>/edit', methods=['GET', 'POST'])
+def edit_post(post_id):
+    post = Post.query.get(post_id)
+    if request.method == 'GET':
+        return render_template('edit_post.html', post_id=post_id)
+    else:
+        return render_template('display_post.html', post=post)
